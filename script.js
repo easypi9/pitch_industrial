@@ -1,6 +1,36 @@
 const progressBar = document.getElementById("scrollProgress");
 const themeToggle = document.getElementById("themeToggle");
+const themeSwitch = document.querySelector(".theme-switch");
+const themeSwitchAnchor = document.getElementById("themeSwitchAnchor");
+const podcastPlayer = document.querySelector(".podcast-player");
 const themeStorageKey = "pitchTheme";
+const mobileThemeQuery = window.matchMedia("(max-width: 760px)");
+
+function relocateThemeSwitch() {
+  if (!themeSwitch || !themeSwitchAnchor || !podcastPlayer) {
+    return;
+  }
+
+  if (mobileThemeQuery.matches) {
+    if (podcastPlayer.firstElementChild !== themeSwitch) {
+      podcastPlayer.insertBefore(themeSwitch, podcastPlayer.firstChild);
+    }
+
+    return;
+  }
+
+  if (themeSwitch.previousElementSibling !== themeSwitchAnchor) {
+    themeSwitchAnchor.insertAdjacentElement("afterend", themeSwitch);
+  }
+}
+
+relocateThemeSwitch();
+
+if (typeof mobileThemeQuery.addEventListener === "function") {
+  mobileThemeQuery.addEventListener("change", relocateThemeSwitch);
+} else if (typeof mobileThemeQuery.addListener === "function") {
+  mobileThemeQuery.addListener(relocateThemeSwitch);
+}
 
 if (themeToggle) {
   const savedTheme = localStorage.getItem(themeStorageKey);
