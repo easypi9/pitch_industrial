@@ -2,6 +2,8 @@ const progressBar = document.getElementById("scrollProgress");
 const themeToggle = document.getElementById("themeToggle");
 const themeSwitch = document.querySelector(".theme-switch");
 const themeSwitchAnchor = document.getElementById("themeSwitchAnchor");
+const podcastPlayer = document.querySelector(".podcast-player");
+const podcastPlayerAnchor = document.getElementById("podcastPlayerAnchor");
 const storyNav = document.getElementById("storyNav");
 const navEyebrow = storyNav?.querySelector(".nav-eyebrow");
 const mobileNavToggle = document.getElementById("mobileNavToggle");
@@ -59,8 +61,8 @@ window.addEventListener("keydown", (event) => {
   }
 });
 
-function relocateThemeSwitch() {
-  if (!themeSwitch || !themeSwitchAnchor || !storyNav) {
+function relocateMobileWidgets() {
+  if (!themeSwitch || !themeSwitchAnchor || !podcastPlayer || !podcastPlayerAnchor || !storyNav) {
     return;
   }
 
@@ -71,20 +73,32 @@ function relocateThemeSwitch() {
       storyNav.insertAdjacentElement("afterbegin", themeSwitch);
     }
 
+    const podcastInsertAfter = themeSwitch.parentElement === storyNav ? themeSwitch : navEyebrow;
+
+    if (podcastInsertAfter && podcastInsertAfter.nextElementSibling !== podcastPlayer) {
+      podcastInsertAfter.insertAdjacentElement("afterend", podcastPlayer);
+    } else if (!podcastInsertAfter && storyNav.firstElementChild !== podcastPlayer) {
+      storyNav.insertAdjacentElement("afterbegin", podcastPlayer);
+    }
+
     return;
   }
 
   if (themeSwitch.previousElementSibling !== themeSwitchAnchor) {
     themeSwitchAnchor.insertAdjacentElement("afterend", themeSwitch);
   }
+
+  if (podcastPlayer.previousElementSibling !== podcastPlayerAnchor) {
+    podcastPlayerAnchor.insertAdjacentElement("afterend", podcastPlayer);
+  }
 }
 
-relocateThemeSwitch();
+relocateMobileWidgets();
 
 if (typeof mobileThemeQuery.addEventListener === "function") {
-  mobileThemeQuery.addEventListener("change", relocateThemeSwitch);
+  mobileThemeQuery.addEventListener("change", relocateMobileWidgets);
 } else if (typeof mobileThemeQuery.addListener === "function") {
-  mobileThemeQuery.addListener(relocateThemeSwitch);
+  mobileThemeQuery.addListener(relocateMobileWidgets);
 }
 
 if (themeToggle) {

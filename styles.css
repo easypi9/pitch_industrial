@@ -601,7 +601,7 @@ body.theme-dark .mobile-nav-backdrop {
   .story-main {
     width: calc(100% - 20px);
     margin: 0 auto;
-    padding-top: 124px;
+    padding-top: 72px;
   }
 
   .mobile-nav-toggle {
@@ -704,25 +704,29 @@ body.theme-dark .mobile-nav-backdrop {
     font-size: 0.92rem;
   }
 
-  .podcast-player {
-    top: calc(10px + env(safe-area-inset-top, 0px));
-    left: 60px;
-    right: 8px;
+  .story-nav .podcast-player {
+    position: static;
+    inset: auto;
+    right: auto;
+    left: auto;
+    top: auto;
     bottom: auto;
-    width: auto;
+    z-index: auto;
+    width: 100%;
     max-width: none;
-    padding: 6px 8px;
+    margin: 0 0 12px;
+    padding: 8px;
     border-radius: 10px;
-    z-index: 93;
+    box-shadow: none;
   }
 
-  .podcast-kicker {
+  .story-nav .podcast-kicker {
     display: block;
     font-size: 0.56rem;
     letter-spacing: 0.09em;
   }
 
-  .podcast-title {
+  .story-nav .podcast-title {
     display: block;
     margin: 2px 0 4px;
     font-size: 0.72rem;
@@ -732,13 +736,13 @@ body.theme-dark .mobile-nav-backdrop {
     text-overflow: ellipsis;
   }
 
-  .podcast-meta {
+  .story-nav .podcast-meta {
     justify-content: flex-start;
     gap: 5px;
     margin: 0 0 3px;
   }
 
-  .podcast-speed-label {
+  .story-nav .podcast-speed-label {
     display: inline;
     font-size: 0.62rem;
   }
@@ -778,17 +782,17 @@ body.theme-dark .mobile-nav-backdrop {
     transform: translateX(19px);
   }
 
-  .podcast-speed-label,
-  .podcast-speed {
+  .story-nav .podcast-speed-label,
+  .story-nav .podcast-speed {
     font-size: 0.62rem;
   }
 
-  .podcast-speed {
+  .story-nav .podcast-speed {
     padding: 2px 5px;
     border-radius: 7px;
   }
 
-  .podcast-player audio {
+  .story-nav .podcast-player audio {
     height: 28px;
   }
 
