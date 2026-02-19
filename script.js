@@ -2,7 +2,8 @@ const progressBar = document.getElementById("scrollProgress");
 const themeToggle = document.getElementById("themeToggle");
 const themeSwitch = document.querySelector(".theme-switch");
 const themeSwitchAnchor = document.getElementById("themeSwitchAnchor");
-const podcastPlayer = document.querySelector(".podcast-player");
+const storyNav = document.getElementById("storyNav");
+const navEyebrow = storyNav?.querySelector(".nav-eyebrow");
 const mobileNavToggle = document.getElementById("mobileNavToggle");
 const mobileNavBackdrop = document.getElementById("mobileNavBackdrop");
 const themeStorageKey = "pitchTheme";
@@ -59,13 +60,15 @@ window.addEventListener("keydown", (event) => {
 });
 
 function relocateThemeSwitch() {
-  if (!themeSwitch || !themeSwitchAnchor || !podcastPlayer) {
+  if (!themeSwitch || !themeSwitchAnchor || !storyNav) {
     return;
   }
 
   if (mobileThemeQuery.matches) {
-    if (podcastPlayer.firstElementChild !== themeSwitch) {
-      podcastPlayer.insertBefore(themeSwitch, podcastPlayer.firstChild);
+    if (navEyebrow && navEyebrow.nextElementSibling !== themeSwitch) {
+      navEyebrow.insertAdjacentElement("afterend", themeSwitch);
+    } else if (!navEyebrow && storyNav.firstElementChild !== themeSwitch) {
+      storyNav.insertAdjacentElement("afterbegin", themeSwitch);
     }
 
     return;
