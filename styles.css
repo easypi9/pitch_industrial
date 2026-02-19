@@ -630,8 +630,12 @@ body.theme-dark .mobile-nav-backdrop {
     inset: 0;
     z-index: 94;
     display: block;
-    background: rgba(11, 16, 23, 0.38);
-    backdrop-filter: blur(2px);
+    background: rgba(11, 16, 23, 0.36);
+    backdrop-filter: none;
+  }
+
+  .mobile-nav-backdrop[hidden] {
+    display: none;
   }
 
   .story-nav {
@@ -673,24 +677,37 @@ body.theme-dark .mobile-nav-backdrop {
   }
 
   .podcast-player {
-    right: 10px;
-    left: 10px;
-    bottom: 10px;
-    width: auto;
-    padding: 9px 10px;
+    right: 8px;
+    left: auto;
+    bottom: calc(8px + env(safe-area-inset-bottom, 0px));
+    width: min(330px, calc(100vw - 16px));
+    padding: 7px 8px;
+    border-radius: 12px;
+  }
+
+  .podcast-kicker {
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
   }
 
   .podcast-title {
-    font-size: 0.84rem;
+    margin: 2px 0 5px;
+    font-size: 0.8rem;
+    line-height: 1.2;
+  }
+
+  .podcast-meta {
+    gap: 6px;
+    margin: 0 0 5px;
   }
 
   .podcast-player .theme-switch {
     position: static;
     z-index: auto;
-    margin: 0 0 8px auto;
-    padding: 4px 6px;
-    gap: 6px;
-    border-radius: 10px;
+    margin: 0 0 6px auto;
+    padding: 3px 5px;
+    gap: 5px;
+    border-radius: 9px;
     border-color: rgba(15, 22, 27, 0.14);
     background: rgba(255, 255, 255, 0.68);
     box-shadow: none;
@@ -699,29 +716,38 @@ body.theme-dark .mobile-nav-backdrop {
 
   .podcast-player .theme-switch__label {
     display: inline;
-    font-size: 0.56rem;
+    font-size: 0.52rem;
     letter-spacing: 0.08em;
   }
 
   .podcast-player .theme-toggle {
-    width: 46px;
-    height: 24px;
+    width: 40px;
+    height: 21px;
   }
 
   .podcast-player .theme-toggle__slider::before {
-    width: 18px;
-    height: 18px;
+    width: 15px;
+    height: 15px;
     left: 3px;
     top: 3px;
   }
 
   .podcast-player .theme-toggle input:checked + .theme-toggle__slider::before {
-    transform: translateX(22px);
+    transform: translateX(19px);
   }
 
   .podcast-speed-label,
   .podcast-speed {
-    font-size: 0.74rem;
+    font-size: 0.68rem;
+  }
+
+  .podcast-speed {
+    padding: 3px 6px;
+    border-radius: 7px;
+  }
+
+  .podcast-player audio {
+    height: 30px;
   }
 
   body.theme-dark .podcast-player .theme-switch {
