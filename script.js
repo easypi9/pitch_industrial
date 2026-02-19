@@ -3,8 +3,60 @@ const themeToggle = document.getElementById("themeToggle");
 const themeSwitch = document.querySelector(".theme-switch");
 const themeSwitchAnchor = document.getElementById("themeSwitchAnchor");
 const podcastPlayer = document.querySelector(".podcast-player");
+const mobileNavToggle = document.getElementById("mobileNavToggle");
+const mobileNavBackdrop = document.getElementById("mobileNavBackdrop");
 const themeStorageKey = "pitchTheme";
 const mobileThemeQuery = window.matchMedia("(max-width: 760px)");
+const mobileNavQuery = window.matchMedia("(max-width: 760px)");
+
+function setMobileNavState(open) {
+  if (!mobileNavToggle || !mobileNavBackdrop) {
+    return;
+  }
+
+  document.body.classList.toggle("mobile-nav-open", open);
+  mobileNavToggle.setAttribute("aria-expanded", open ? "true" : "false");
+  mobileNavBackdrop.hidden = !open;
+}
+
+function closeMobileNav() {
+  setMobileNavState(false);
+}
+
+function onMobileNavBreakpointChange(event) {
+  if (!event.matches) {
+    closeMobileNav();
+  }
+}
+
+if (mobileNavToggle) {
+  mobileNavToggle.addEventListener("click", () => {
+    const shouldOpen = !document.body.classList.contains("mobile-nav-open");
+
+    if (shouldOpen && mobileNavQuery.matches) {
+      setMobileNavState(true);
+      return;
+    }
+
+    closeMobileNav();
+  });
+}
+
+if (mobileNavBackdrop) {
+  mobileNavBackdrop.addEventListener("click", closeMobileNav);
+}
+
+if (typeof mobileNavQuery.addEventListener === "function") {
+  mobileNavQuery.addEventListener("change", onMobileNavBreakpointChange);
+} else if (typeof mobileNavQuery.addListener === "function") {
+  mobileNavQuery.addListener(onMobileNavBreakpointChange);
+}
+
+window.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") {
+    closeMobileNav();
+  }
+});
 
 function relocateThemeSwitch() {
   if (!themeSwitch || !themeSwitchAnchor || !podcastPlayer) {
@@ -81,6 +133,12 @@ navLinks.forEach((link) => {
   if (id) {
     sectionMap.set(id, link);
   }
+
+  link.addEventListener("click", () => {
+    if (mobileNavQuery.matches) {
+      closeMobileNav();
+    }
+  });
 });
 
 const sectionObserver = new IntersectionObserver(

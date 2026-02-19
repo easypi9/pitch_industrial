@@ -39,7 +39,21 @@
       </audio>
     </div>
 
-    <aside class="story-nav" aria-label="Pitch sections">
+    <button
+      id="mobileNavToggle"
+      class="mobile-nav-toggle"
+      type="button"
+      aria-label="Open section menu"
+      aria-controls="storyNav"
+      aria-expanded="false"
+    >
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <div id="mobileNavBackdrop" class="mobile-nav-backdrop" hidden></div>
+
+    <aside id="storyNav" class="story-nav" aria-label="Pitch sections">
       <p class="nav-eyebrow">Pitch Industrial</p>
       <ul>
         <li><a href="#s01">01 TITLE</a></li>
