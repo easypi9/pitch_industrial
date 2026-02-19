@@ -1,8 +1,8 @@
 # Pitch Industrial (Protected)
 
-Investor pitch site with HTTP Basic Auth protection.
+Investor pitch site with server-side HTTP Basic Auth.
 
-## 1. Run locally
+## Local Run
 
 ```bash
 cd "/Users/macbook/Pitch Industrial"
@@ -14,52 +14,76 @@ npm start
 
 Open: `http://localhost:8080`
 
-You will be prompted for login/password.
+## Auth Variables
 
-## 2. Access control model
-
-- Protection is server-side (HTTP Basic Auth), not client-side imitation.
-- Credentials are configured through env vars:
-  - `PITCH_USER`
-  - `PITCH_PASS`
-- Share the URL only with people who should have access.
-- Rotate password by changing env var and restarting server.
-
-## 3. Deploy from repository
-
-This is a Node server, so use any host that runs Node apps (Render, Railway, Fly.io, VPS).
-
-Set environment variables in hosting settings:
-
+Required:
 - `PITCH_USER`
 - `PITCH_PASS`
-- `PORT` (if required by platform)
 
-Start command:
+Optional (for zero-downtime rotation):
+- `PITCH_USER_NEXT`
+- `PITCH_PASS_NEXT`
+
+The server accepts either the primary pair or the temporary NEXT pair.
+
+## Deploy Option 1: Render (Blueprint)
+
+Blueprint file is already included: `render.yaml`.
+
+Render import link:
+- https://dashboard.render.com/blueprint/new?repo=https://github.com/easypi9/pitch_industrial
+
+Set these env vars in Render before first deploy:
+- `PITCH_USER`
+- `PITCH_PASS`
+- optionally `PITCH_USER_NEXT`, `PITCH_PASS_NEXT`
+
+Notes:
+- Runtime: Node
+- Start command: `npm start`
+- Health check path: `/healthz`
+
+## Deploy Option 2: Railway
+
+Railway config is included: `railway.json`.
+
+Steps:
+1. Create new project from repo `easypi9/pitch_industrial`
+2. In Variables, set:
+- `PITCH_USER`
+- `PITCH_PASS`
+- optionally `PITCH_USER_NEXT`, `PITCH_PASS_NEXT`
+3. Deploy (start command is `npm start`)
+
+## Recommended Credential Policy
+
+Use a unique login and long random password per investor cohort.
+
+Example generation commands:
 
 ```bash
-npm start
+# login suffix (8 hex chars)
+python3 - <<'PY'
+import secrets
+print(f"investor-{secrets.token_hex(4)}")
+PY
+
+# 24-char strong password
+python3 - <<'PY'
+import secrets, string
+alphabet = string.ascii_letters + string.digits + "!@#$%^&*-_"
+print(''.join(secrets.choice(alphabet) for _ in range(24)))
+PY
 ```
 
-Health endpoint (no auth):
+Rotation workflow:
+1. Put new pair into `PITCH_USER_NEXT` and `PITCH_PASS_NEXT`
+2. Share new pair with allowed recipients
+3. After transition, move NEXT pair to primary (`PITCH_USER`/`PITCH_PASS`)
+4. Clear NEXT vars and redeploy
 
-- `/healthz`
+## Audio File
 
-## 4. Create and push repository
-
-```bash
-git init
-git add .
-git commit -m "Add protected pitch with basic auth"
-# replace with your repository URL:
-git remote add origin <your-repo-url>
-git branch -M main
-git push -u origin main
-```
-
-## 5. Audio file path
-
-The embedded podcast is loaded from:
-
+Embedded podcast file path:
 - `audio/pitch-podcast.m4a`
 

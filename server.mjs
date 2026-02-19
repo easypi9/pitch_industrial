@@ -16,10 +16,25 @@ if (ROOT_DIR !== __dirname) {
 const PORT = Number.parseInt(process.env.PORT || "8080", 10);
 const AUTH_USER = process.env.PITCH_USER || "";
 const AUTH_PASS = process.env.PITCH_PASS || "";
+const AUTH_USER_NEXT = process.env.PITCH_USER_NEXT || "";
+const AUTH_PASS_NEXT = process.env.PITCH_PASS_NEXT || "";
 
 if (!AUTH_USER || !AUTH_PASS) {
   console.error("Missing credentials. Set PITCH_USER and PITCH_PASS environment variables.");
   process.exit(1);
+}
+
+if ((AUTH_USER_NEXT && !AUTH_PASS_NEXT) || (!AUTH_USER_NEXT && AUTH_PASS_NEXT)) {
+  console.error(
+    "Rotation credentials are incomplete. Set both PITCH_USER_NEXT and PITCH_PASS_NEXT, or neither."
+  );
+  process.exit(1);
+}
+
+const AUTH_CREDENTIALS = [{ user: AUTH_USER, pass: AUTH_PASS }];
+
+if (AUTH_USER_NEXT && AUTH_PASS_NEXT) {
+  AUTH_CREDENTIALS.push({ user: AUTH_USER_NEXT, pass: AUTH_PASS_NEXT });
 }
 
 const MIME_TYPES = {
@@ -82,9 +97,10 @@ function isAuthorized(request) {
     return false;
   }
 
-  return (
-    constantTimeEqual(credentials.user, AUTH_USER) &&
-    constantTimeEqual(credentials.pass, AUTH_PASS)
+  return AUTH_CREDENTIALS.some(
+    (allowed) =>
+      constantTimeEqual(credentials.user, allowed.user) &&
+      constantTimeEqual(credentials.pass, allowed.pass)
   );
 }
 

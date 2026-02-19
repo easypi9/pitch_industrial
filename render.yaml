@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: pitch-industrial
+    runtime: node
+    plan: free
+    buildCommand: npm ci --omit=dev
+    startCommand: npm start
+    autoDeploy: true
+    healthCheckPath: /healthz
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PITCH_USER
+        sync: false
+      - key: PITCH_PASS
+        sync: false
+      - key: PITCH_USER_NEXT
+        sync: false
+      - key: PITCH_PASS_NEXT
+        sync: false
+
